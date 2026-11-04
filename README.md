@@ -12,7 +12,20 @@ result to **your** GitHub after you connect it. No API key, no extra server: Cla
 3. **Rebuild.** Claude writes new, working code, with your own content for anything that is not yours.
 4. **Push.** With your approval, Claude commits under your name and pushes to the repo you choose.
 
-## Install
+## Local scanner (no API key)
+
+```bash
+git clone https://github.com/dev-shubh-madara/site-re-agent
+cd site-re-agent
+python setup.py
+```
+
+`setup.py` checks for Ollama (and offers to install it), downloads the model, then starts a page at
+`http://localhost:8765`. Paste your site URL, tick the ownership box, and it collects the public front-end files,
+endpoints and libraries into a ZIP in `out/`. Upload that ZIP to your Claude chat with this repo's link.
+Private/local addresses are blocked, and nothing is pushed anywhere automatically.
+
+## Install the skill
 
 Pick whichever your Claude app supports:
 
@@ -28,7 +41,7 @@ Then in a chat, say: *"Use site-re-agent to rebuild https://my-own-site.com"*
 - Clone a real brand's or organisation's site, or make look-alike login, payment or support pages
 - Bypass logins or paywalls, scrape private data, or exploit vulnerabilities
 - Copy someone else's logos, text, images or proprietary code
-- Ask for your passwords or tokens: connect GitHub through the app's connector or your own `gh` login
+- Ask for your passwords or tokens: connect GitHub through the app's connector or run `gh auth login` yourself
 
 ## Roadmap
 

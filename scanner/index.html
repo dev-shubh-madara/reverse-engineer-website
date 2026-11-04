@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Site RE Scanner</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0b0b10;color:#e8e8f0;max-width:720px;margin:40px auto;padding:0 16px}
+input[type=text]{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#15151d;color:inherit;box-sizing:border-box}
+button{margin-top:12px;padding:12px 20px;border:0;border-radius:8px;background:#7c5cff;color:#fff;font-weight:600;cursor:pointer}
+pre{background:#15151d;padding:12px;border-radius:8px;white-space:pre-wrap;overflow:auto}
+label{display:block;margin-top:12px}
+</style></head><body>
+<h1>Site RE Scanner</h1>
+<p>Collects your site's public front-end files and packs them into a ZIP for Claude.</p>
+<input id="url" type="text" placeholder="https://your-site.com">
+<label><input id="ok" type="checkbox"> I own this website or have permission from the owner to work on it</label>
+<button id="go">Scan</button>
+<pre id="out"></pre>
+<script>
+document.getElementById('go').onclick = async () => {
+  const out = document.getElementById('out'); out.textContent = 'Scanning... (the local model can take a minute)';
+  const r = await fetch('/scan', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({url: document.getElementById('url').value, confirmed: document.getElementById('ok').checked})});
+  const d = await r.json();
+  out.textContent = d.error ? 'Error: ' + d.error :
+    'Done.\n\nZIP: ' + d.zip + '\n\nNext: upload this ZIP to your Claude chat and say:\n"Use site-re-agent to rebuild this site."\n\n' +
+    'Files: ' + d.files.length + '\nEndpoints found: ' + d.endpoints.length + '\n\n' + d.summary;
+};
+</script></body></html>
