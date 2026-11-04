@@ -1,6 +1,8 @@
 {
   "name": "site-re-agent",
-  "description": "Reverse engineer a website you own or are authorised to work on, rebuild it as original code, and push it to your GitHub. No API key needed.",
-  "version": "0.1.0",
-  "author": { "name": "dev-shubh-madara" }
+  "description": "Rebuild and modernize a website you own as clean original code, verify the rebuild matches with a screenshot diff, and push it to your own GitHub. No API key needed.",
+  "version": "1.0.0",
+  "author": { "name": "dev-shubh-madara" },
+  "license": "MIT",
+  "homepage": "https://github.com/dev-shubh-madara/site-re-agent"
 }
