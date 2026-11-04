@@ -12,7 +12,7 @@ import socket
 import urllib.parse
 
 USER_AGENT = (
-    "site-re-agent/1.0 (+https://github.com/dev-shubh-madara/site-re-agent; owner-authorised rebuild)"
+    "site-re-agent/1.0 (+https://github.com/dev-shubh-madara/reverse-engineer-website; owner-authorised rebuild)"
 )
 
 

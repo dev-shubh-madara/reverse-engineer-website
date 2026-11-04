@@ -11,8 +11,8 @@ will be declined. Keep the guard rails in `sitere/safety.py` intact (or stronger
 ## Getting set up
 
 ```bash
-git clone https://github.com/dev-shubh-madara/site-re-agent
-cd site-re-agent
+git clone https://github.com/dev-shubh-madara/reverse-engineer-website
+cd reverse-engineer-website
 pip install -r requirements-dev.txt
 python -m playwright install chromium   # only needed to run the verify loop
 pytest -q

@@ -4,7 +4,7 @@
 
 ### Rebuild and modernize a website you own — as clean original code — and *prove* the rebuild matches.
 
-[![CI](https://github.com/dev-shubh-madara/site-re-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/dev-shubh-madara/site-re-agent/actions)
+[![CI](https://github.com/dev-shubh-madara/reverse-engineer-website/actions/workflows/ci.yml/badge.svg)](https://github.com/dev-shubh-madara/reverse-engineer-website/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 ![No API key](https://img.shields.io/badge/API%20key-not%20required-success)
@@ -33,8 +33,8 @@ Claude is the engine. There's no API key, no paid service, and no closed black b
 ## 🚀 Quickstart
 
 ```bash
-git clone https://github.com/dev-shubh-madara/site-re-agent
-cd site-re-agent
+git clone https://github.com/dev-shubh-madara/reverse-engineer-website
+cd reverse-engineer-website
 python start.py          # checks Ollama, installs the browser, launches the collector UI
 ```
 
@@ -91,7 +91,7 @@ This is an open project and contributors are very welcome — new stack template
 
 - ⭐ **Star** the repo if it's useful — it genuinely helps.
 - 🧑‍💻 Open an issue or a PR (see [CONTRIBUTING](CONTRIBUTING.md)).
-- ✉️ Want to build together? Open a [discussion / issue](https://github.com/dev-shubh-madara/site-re-agent/issues) titled **"Collab"**, or email **<add-your-email-here>**.
+- ✉️ Want to build together? Open a [discussion / issue](https://github.com/dev-shubh-madara/reverse-engineer-website/issues) titled **"Collab"**, or email **shubhkumarmishra5@gmail.com**.
 
 ## 🗺️ Roadmap
 
