@@ -1,0 +1,6 @@
+{
+  "name": "site-re-agent",
+  "description": "Reverse engineer a website you own or are authorised to work on, rebuild it as original code, and push it to your GitHub. No API key needed.",
+  "version": "0.1.0",
+  "author": { "name": "dev-shubh-madara" }
+}
