@@ -32,6 +32,7 @@ def main(argv=None) -> int:
     p_rebuild.add_argument("--i-own-this", action="store_true", help="confirm ownership without the prompt (for scripts)")
     p_rebuild.add_argument("--allow-local", action="store_true", help="allow a localhost target (your own dev server)")
     p_rebuild.add_argument("--plain", action="store_true", help="plain log instead of the live board")
+    p_rebuild.add_argument("--save", action="store_true", help="save without the preview prompt (for scripts)")
 
     args = parser.parse_args(argv)
 
@@ -51,20 +52,30 @@ def main(argv=None) -> int:
         except Refused as e:
             print(f"Refused: {e}", file=sys.stderr)
             return 1
+        from .preview import commit_or_discard, preview_and_ask
+        import shutil
         n_agents = max(1, min(args.agents, 30))
+        staging = os.path.abspath(args.out) + ".preview-tmp"
+        shutil.rmtree(staging, ignore_errors=True)
         cfg = Config(
-            out_dir=args.out, agents=n_agents, max_pages=args.max_pages,
+            out_dir=staging, agents=n_agents, max_pages=args.max_pages,
             max_assets=args.max_assets, max_depth=args.depth,
             allow_loopback=args.allow_local,
             dashboard_mode="plain" if args.plain else "auto",
         )
         print(f"Sending {n_agents} agents to rebuild {args.url} ...")
         result = rebuild(args.url, cfg)
-        where = os.path.join(args.out, "")
         print(f"\nDone: {result.summary()}")
-        print(f"Front end saved to {where}  (open {os.path.join(args.out, 'index.html')})")
-        print(f"Next: python -m sitere verify --original {args.url} --rebuild {args.out}")
-        return 0 if result.pages else 1
+        if not result.pages:
+            shutil.rmtree(staging, ignore_errors=True)
+            print("Nothing was rebuilt, so nothing to preview.")
+            return 1
+        keep = preview_and_ask(staging, auto_save=args.save)
+        saved = commit_or_discard(staging, args.out, keep)
+        if saved:
+            print(f"Open {os.path.join(args.out, 'index.html')}")
+            print(f"Next: py -m sitere verify --original {args.url} --rebuild {args.out}")
+        return 0
 
     if args.cmd == "verify":
         from .verify import verify

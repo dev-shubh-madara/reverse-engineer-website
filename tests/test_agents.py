@@ -165,6 +165,17 @@ def test_manifest_is_written(site, tmp_path):
 def test_cli_rebuild_runs_end_to_end(site, tmp_path):
     from sitere.__main__ import main
     out = str(tmp_path / "cli-out")
-    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--out", out, "--agents", "6"])
+    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--save", "--out", out, "--agents", "6"])
     assert code == 0
     assert os.path.exists(os.path.join(out, "index.html"))
+    assert not os.path.exists(out + ".preview-tmp")  # staging cleaned up
+
+
+def test_cli_rebuild_without_save_keeps_nothing(site, tmp_path):
+    from sitere.__main__ import main
+    out = str(tmp_path / "nosave-out")
+    # non-interactive and no --save: must not write the output folder
+    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--out", out, "--agents", "6"])
+    assert code == 0
+    assert not os.path.exists(os.path.join(out, "index.html"))
+    assert not os.path.exists(out + ".preview-tmp")

@@ -77,9 +77,18 @@ once instead of one scrolling log:
   rebuilt 18/40
 ```
 
-When it's done you get a working offline copy in `mysite/` - open `index.html` and it looks
-like the real thing, with every link pointing at the local files. Then run the verify step,
-or hand the folder to the skill to turn into fresh, clean code.
+When the crew finishes, it opens the rebuild in your browser as a local preview and asks
+before it keeps anything:
+
+```
+Preview is open in your browser: http://127.0.0.1:52133/
+Keep this rebuild? type SAVE to save it, anything else throws it away:
+```
+
+Nothing is written to your output folder until you type `SAVE`. Say no and the whole thing is
+thrown away. Once you keep it you get a working offline copy in `mysite/` - open `index.html`
+and it looks like the real thing, with every link pointing at the local files. Then run the
+verify step, or hand the folder to the skill to turn into fresh, clean code.
 
 A few things it does on purpose:
 
@@ -96,7 +105,8 @@ A few things it does on purpose:
   pages and how much it downloads, and skips oversized files.
 
 Flags I use most: `--agents 30`, `--max-pages 60`, `--depth 4`, `--plain` (for a plain log
-instead of the live board), `--i-own-this` (skip the prompt in a script).
+instead of the live board), `--i-own-this` (skip the ownership prompt in a script), `--save`
+(skip the preview prompt and keep it straight away, for scripts).
 
 ## Modes
 
