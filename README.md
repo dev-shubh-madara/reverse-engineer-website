@@ -47,8 +47,60 @@ See verify-out/VERIFY.md and the diff-*.png images.
 
 The diff images show the exact spots that differ, so you can fix those and run it again until it's close.
 
+## Fast mode: the agent crew
+
+The skill reads a page carefully and rebuilds it with clean code. But when I just want the
+whole front end of my own site pulled down fast - every page, every stylesheet, script, image
+and font - I use the crew:
+
+```bash
+python -m sitere rebuild https://my-own-site.com --out mysite
+```
+
+It asks one thing first:
+
+```
+If this site is yours, type  I OWN THIS  to continue:
+```
+
+Type it and a pool of agents goes to work. By default 24 run at once (you can set `--agents`
+up to 30). They share one job list: reading a page adds its stylesheets, scripts, images and
+same-site links back into the list, so the crew fans out across the whole site until there's
+nothing left. Each agent shows its own line while it works, so you can watch all of them at
+once instead of one scrolling log:
+
+```
+  ⠹ agent 00  reading /pricing
+  ⠹ agent 01  fetching /css/app.css
+  ⠸ agent 02  fetching /img/hero.png
+  ...
+  rebuilt 18/40
+```
+
+When it's done you get a working offline copy in `mysite/` - open `index.html` and it looks
+like the real thing, with every link pointing at the local files. Then run the verify step,
+or hand the folder to the skill to turn into fresh, clean code.
+
+A few things it does on purpose:
+
+- **Front end only.** It downloads what the browser already receives. A site's back end lives
+  on its server and never reaches the browser, so it can't be and isn't copied. There's a note
+  saying exactly that in every rebuild.
+- **Your site only.** It stays on the one domain you pointed it at. An off-site link or a
+  third-party CDN file is left as-is, not downloaded, so you don't end up with someone else's
+  assets.
+- **No GPU, no key.** The agents are plain Python workers doing network and file work in
+  parallel. Nothing loads a model, so it runs the same on any laptop.
+- **Safe by default.** It redacts anything that looks like a key before writing a file, blocks
+  private and local addresses (pass `--allow-local` for your own dev server), caps how many
+  pages and how much it downloads, and skips oversized files.
+
+Flags I use most: `--agents 30`, `--max-pages 60`, `--depth 4`, `--plain` (for a plain log
+instead of the live board), `--i-own-this` (skip the prompt in a script).
+
 ## Modes
 
+- Pull down the whole front end of your own site with the agent crew, then rebuild it.
 - Rebuild your own site into fresh code.
 - Learn from a public site's techniques and build your own version with your own content.
 - Verify any rebuild against its original.
