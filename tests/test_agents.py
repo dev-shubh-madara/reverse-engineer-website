@@ -160,3 +160,11 @@ def test_manifest_is_written(site, tmp_path):
     manifest = read(tmp_path, "REBUILD.md").decode()
     assert "front end only" in manifest
     assert "never" in manifest.lower()
+
+
+def test_cli_rebuild_runs_end_to_end(site, tmp_path):
+    from sitere.__main__ import main
+    out = str(tmp_path / "cli-out")
+    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--out", out, "--agents", "6"])
+    assert code == 0
+    assert os.path.exists(os.path.join(out, "index.html"))
