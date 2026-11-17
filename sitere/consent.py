@@ -1,8 +1,10 @@
-"""The ownership gate.
+"""The ownership gate and the use notice.
 
-Before the rebuild engine touches a site, the person has to say, in their own words,
-that it's their site. This is the same idea as a pre-flight checklist: it won't stop a
-determined misuse, but it makes the one rule of this tool impossible to miss.
+Before the rebuild engine touches a site, the person has to (1) see what this tool is for,
+(2) put their own name to the run, and (3) confirm, in their own words, that the site is
+theirs. None of this stops a determined misuse on its own - the same-origin and front-end
+limits in the engine do the real work - but it makes the one rule impossible to miss and
+ties every run to the person who started it.
 """
 from __future__ import annotations
 
@@ -10,16 +12,42 @@ import sys
 
 PHRASE = "I OWN THIS"
 
-PROMPT = """\
-site-re-agent only rebuilds a site you own or are allowed to rebuild.
-It reads the public front end of:
+NOTICE = """\
+------------------------------------------------------------
+ site-re-agent  -  use notice
+------------------------------------------------------------
+ This tool is for rebuilding a website you OWN, or have
+ written permission to rebuild. It is provided for testing
+ and entertainment use only, as-is and with no warranty.
 
-    {url}
+ It reads only the public front end of the one site you
+ point it at. It does not reach any back end, and it will
+ not crawl off that site.
 
-and writes a fresh copy of that front end to disk. It does not touch anyone
-else's site, and it never copies a back end.
+ You are responsible for how you use it and for following
+ the law and the terms of any website. If it is misused,
+ that is on the person who ran it, not on the author.
+------------------------------------------------------------"""
 
-If this site is yours, type  {phrase}  to continue (anything else cancels): """
+PROMPT = "If this site is yours, type  {phrase}  to continue (anything else cancels): "
+
+
+def show_notice(stream=None) -> None:
+    print(NOTICE, file=stream or sys.stdout)
+
+
+def operator_name(provided: str = "", *, stream=None) -> str:
+    """The name of the person running this. Stamped onto the run so it is theirs."""
+    out = stream or sys.stdout
+    if provided and provided.strip():
+        return provided.strip()[:80]
+    if not sys.stdin.isatty():
+        return "unnamed operator"
+    try:
+        name = input("Your name (the developer running this rebuild): ").strip()
+    except (EOFError, KeyboardInterrupt):
+        return "unnamed operator"
+    return name[:80] if name else "unnamed operator"
 
 
 def confirm_ownership(url: str, *, preapproved: bool = False, stream=None) -> bool:
@@ -38,8 +66,9 @@ def confirm_ownership(url: str, *, preapproved: bool = False, stream=None) -> bo
             file=out,
         )
         return False
+    print(f"\nTarget: {url}", file=out)
     try:
-        answer = input(PROMPT.format(url=url, phrase=PHRASE))
+        answer = input(PROMPT.format(phrase=PHRASE))
     except (EOFError, KeyboardInterrupt):
         print("\nCancelled.", file=out)
         return False

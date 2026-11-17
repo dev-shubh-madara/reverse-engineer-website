@@ -156,19 +156,25 @@ def test_offsite_seed_is_refused(tmp_path):
 
 
 def test_manifest_is_written(site, tmp_path):
-    rebuild(site, cfg(tmp_path))
+    rebuild(site, cfg(tmp_path, operator="Madara"))
     manifest = read(tmp_path, "REBUILD.md").decode()
-    assert "front end only" in manifest
-    assert "never" in manifest.lower()
+    assert "front end" in manifest
+    assert "never sent to the" in manifest  # back end cannot be copied
+    assert "Run by: Madara" in manifest      # the operator is stamped on the run
 
 
 def test_cli_rebuild_runs_end_to_end(site, tmp_path):
     from sitere.__main__ import main
     out = str(tmp_path / "cli-out")
-    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--save", "--out", out, "--agents", "6"])
+    code = main(["rebuild", site, "--i-own-this", "--allow-local", "--plain", "--save",
+                 "--by", "Madara", "--out", out, "--agents", "6"])
     assert code == 0
     assert os.path.exists(os.path.join(out, "index.html"))
     assert not os.path.exists(out + ".preview-tmp")  # staging cleaned up
+    with open(os.path.join(out, "REBUILD.md"), encoding="utf-8") as fh:
+        manifest = fh.read()
+    assert "Madara" in manifest  # the run is stamped with the operator's name
+    assert "entertainment" in manifest.lower()
 
 
 def test_cli_rebuild_without_save_keeps_nothing(site, tmp_path):

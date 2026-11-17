@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+NOTICE — intended use
+
+This software is for rebuilding a website you own, or have written permission to
+rebuild, and is provided for testing and entertainment use. It reads only the public
+front end of the one site it is pointed at; it does not and cannot copy a back end,
+and it will not crawl other domains. You are responsible for using it only on sites
+you are allowed to rebuild and for following the law and the terms of any website.
+Misuse is the responsibility of the person who runs it. See DISCLAIMER.md for details.

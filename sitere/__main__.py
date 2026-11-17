@@ -33,6 +33,7 @@ def main(argv=None) -> int:
     p_rebuild.add_argument("--allow-local", action="store_true", help="allow a localhost target (your own dev server)")
     p_rebuild.add_argument("--plain", action="store_true", help="plain log instead of the live board")
     p_rebuild.add_argument("--save", action="store_true", help="save without the preview prompt (for scripts)")
+    p_rebuild.add_argument("--by", default="", metavar="NAME", help="your name, stamped on the run (skips the name prompt)")
 
     args = parser.parse_args(argv)
 
@@ -43,8 +44,10 @@ def main(argv=None) -> int:
 
     if args.cmd == "rebuild":
         from .agents import Config, rebuild
-        from .consent import confirm_ownership
+        from .consent import confirm_ownership, operator_name, show_notice
         from .safety import Refused, validate_target
+        show_notice()
+        who = operator_name(args.by)
         if not confirm_ownership(args.url, preapproved=args.i_own_this):
             return 1
         try:
@@ -62,8 +65,9 @@ def main(argv=None) -> int:
             max_assets=args.max_assets, max_depth=args.depth,
             allow_loopback=args.allow_local,
             dashboard_mode="plain" if args.plain else "auto",
+            operator=who,
         )
-        print(f"Sending {n_agents} agents to rebuild {args.url} ...")
+        print(f"\n{who} is rebuilding {args.url} with {n_agents} agents (testing / entertainment use only) ...")
         result = rebuild(args.url, cfg)
         print(f"\nDone: {result.summary()}")
         if not result.pages:

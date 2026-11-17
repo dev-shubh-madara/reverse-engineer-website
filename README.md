@@ -4,6 +4,12 @@ I built this because I kept wanting to rebuild my own old sites with cleaner cod
 
 No API key. It runs inside your Claude chat as a skill, plus a small local tool for the screenshot checking.
 
+## For testing and entertainment use - on your own sites
+
+This is for rebuilding a site **you own**, or have written permission to rebuild, and it is shared for testing and entertainment use. It reads only the public front end of the one site you point it at - it does not and cannot copy a back end, and it will not crawl other domains. Before it runs, it shows a use notice, asks for your name, and asks you to type `I OWN THIS`.
+
+You are responsible for using it only on sites you are allowed to rebuild. If it is misused, that is on the person who ran it. This notice is a good-faith statement of intent, not a legal guarantee - the real safeguards are built into the tool. See [DISCLAIMER.md](DISCLAIMER.md) and the [LICENSE](LICENSE).
+
 ## What it does
 
 1. You point it at a site you own.

@@ -56,12 +56,14 @@ class Config:
     timeout: float = 15.0
     allow_loopback: bool = False
     dashboard_mode: str = "auto"
+    operator: str = ""
 
 
 @dataclass
 class Result:
     seed: str
     out_dir: str
+    operator: str = ""
     pages: int = 0
     assets: int = 0
     bytes: int = 0
@@ -124,7 +126,7 @@ class Rebuilder:
         self.q: "queue.Queue[Job|None]" = queue.Queue()
         self.seen: set[str] = set()
         self.lock = threading.Lock()
-        self.result = Result(seed=seed, out_dir=config.out_dir)
+        self.result = Result(seed=seed, out_dir=config.out_dir, operator=config.operator or "unnamed operator")
         self.board = Dashboard(config.agents, mode=config.dashboard_mode)
         self._active = 0
         self._active_lock = threading.Lock()
@@ -353,11 +355,15 @@ def _write_manifest(out_dir: str, result: Result, seed: str):
     lines = [
         "# Rebuilt front end",
         "",
+        f"Run by: {result.operator} (confirmed they own this site)",
         f"Source (a site the operator confirmed they own): {seed}",
         f"Result: {result.summary()}",
         "",
-        "This is a static copy of the public front end only. There is no back-end code here -",
-        "a site's server logic is never sent to the browser, so it cannot be and was not copied.",
+        "For testing and entertainment use only. This is a static copy of the public front end",
+        "only. There is no back-end code here - a site's server logic is never sent to the",
+        "browser, so it cannot be and was not copied. Whoever ran this is responsible for using",
+        "it on a site they own and for following the law.",
+        "",
         "Open index.html to preview, then rebuild it into clean code with the site-re-agent skill.",
     ]
     if result.errors:
